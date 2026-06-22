@@ -1,0 +1,34 @@
+{
+  "name": "greymoth-devkit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The shared engine behind greymoth's tools: deterministic rules in, a shareable verdict card out. Zero-LLM, zero-network.",
+  "type": "module",
+  "license": "MIT",
+  "author": "greymoth <m.hirakawa07@icloud.com>",
+  "homepage": "https://github.com/greymoth-jp/greymoth-devkit",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/greymoth-jp/greymoth-devkit.git"
+  },
+  "workspaces": [
+    "packages/tokens",
+    "packages/rules-core",
+    "packages/scorecard",
+    "packages/sharecard"
+  ],
+  "scripts": {
+    "build": "npm -w @greymoth/tokens run build && npm -w @greymoth/rules-core run build && npm -w @greymoth/scorecard run build && npm -w @greymoth/sharecard run build",
+    "typecheck": "tsc --noEmit -p tsconfig.base.json",
+    "pretest": "npm run build",
+    "test": "node --test",
+    "demo": "node examples/pipeline-demo.ts",
+    "clean": "node -e \"const{rmSync}=require('node:fs');['tokens','rules-core','scorecard','sharecard'].forEach(p=>rmSync('packages/'+p+'/dist',{recursive:true,force:true}))\""
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
