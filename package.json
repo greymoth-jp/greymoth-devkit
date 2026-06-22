@@ -9,7 +9,7 @@
   "homepage": "https://github.com/greymoth-jp/greymoth-devkit",
   "repository": {
     "type": "git",
-    "url": "https://github.com/greymoth-jp/greymoth-devkit.git"
+    "url": "git+https://github.com/greymoth-jp/greymoth-devkit.git"
   },
   "workspaces": [
     "packages/tokens",

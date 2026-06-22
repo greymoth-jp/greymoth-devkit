@@ -6,6 +6,7 @@ Thumbs.db
 *.log
 .env
 .env.*
+.npmrc
 # Verification screenshots are throwaway; the generated SVG cards are committed
 # proof (the landing page embeds them).
 /examples/out/_verify-*.png

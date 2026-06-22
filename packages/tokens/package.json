@@ -15,15 +15,23 @@
     },
     "./tokens.css": "./dist/tokens.css"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json && node scripts/gen-css.mjs",
     "test": "node --test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/greymoth-jp/greymoth-devkit.git",
+    "url": "git+https://github.com/greymoth-jp/greymoth-devkit.git",
     "directory": "packages/tokens"
   },
-  "keywords": ["design-tokens", "design-system", "risograph", "css-variables", "greymoth"]
+  "keywords": [
+    "design-tokens",
+    "design-system",
+    "risograph",
+    "css-variables",
+    "greymoth"
+  ]
 }

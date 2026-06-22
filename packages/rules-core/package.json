@@ -14,15 +14,24 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "node --test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/greymoth-jp/greymoth-devkit.git",
+    "url": "git+https://github.com/greymoth-jp/greymoth-devkit.git",
     "directory": "packages/rules-core"
   },
-  "keywords": ["rule-engine", "deterministic", "audit", "scoring", "no-llm", "greymoth"]
+  "keywords": [
+    "rule-engine",
+    "deterministic",
+    "audit",
+    "scoring",
+    "no-llm",
+    "greymoth"
+  ]
 }

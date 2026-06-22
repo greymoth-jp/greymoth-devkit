@@ -14,7 +14,9 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "node --test"
@@ -25,8 +27,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/greymoth-jp/greymoth-devkit.git",
+    "url": "git+https://github.com/greymoth-jp/greymoth-devkit.git",
     "directory": "packages/sharecard"
   },
-  "keywords": ["og-image", "social-card", "share-card", "svg", "1200x630", "greymoth"]
+  "keywords": [
+    "og-image",
+    "social-card",
+    "share-card",
+    "svg",
+    "1200x630",
+    "greymoth"
+  ]
 }
