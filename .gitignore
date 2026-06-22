@@ -10,3 +10,26 @@ Thumbs.db
 # Verification screenshots are throwaway; the generated SVG cards are committed
 # proof (the landing page embeds them).
 /examples/out/_verify-*.png
+
+# === git-exposure-guardian (2026-06-22): never commit internal strategy/assets ===
+_docs/
+REQUIREMENTS.md
+RULES.md
+*HANDOFF*
+REFERENCES.md
+*MASTER*.md
+SELFKILL*.md
+COMPETITOR*.md
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.p8
+id_rsa*
+*-credentials.json
+serviceAccount*.json
+research_bus/
+MEMORY.md
+# === end git-exposure-guardian ===
