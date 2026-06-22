@@ -7,7 +7,7 @@ Everything here is ready except the steps that need a human login.
 ## Pre-publish (do once)
 
 - [ ] `npm whoami` — log in; create the `@greymoth` npm org/scope if needed.
-- [ ] Copy `LICENSE` into each `packages/*/` (npm includes the field already; a file is tidier).
+- [x] Copy `LICENSE` into each `packages/*/` — done (each package ships its own MIT file).
 - [ ] Decide public vs. scoped-public: `npm publish --access public` for each package.
 - [ ] Push to GitHub: `gh repo create greymoth-jp/greymoth-devkit --public --source=. --push`.
 - [ ] Enable GitHub Pages on `main` (root) → the story page at `index.html` goes live.
