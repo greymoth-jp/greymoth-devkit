@@ -1,0 +1,31 @@
+{
+  "name": "@greymoth/scorecard",
+  "version": "0.1.0",
+  "description": "0–100 score plus a verdict-stamp badge, rendered as framework-agnostic SVG/HTML strings. The greymoth verdict look, in one function.",
+  "type": "module",
+  "license": "MIT",
+  "author": "greymoth <m.hirakawa07@icloud.com>",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@greymoth/tokens": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/greymoth-jp/greymoth-devkit.git",
+    "directory": "packages/scorecard"
+  },
+  "keywords": ["score", "verdict", "badge", "svg", "ui", "greymoth"]
+}

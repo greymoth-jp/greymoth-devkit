@@ -1,0 +1,32 @@
+{
+  "name": "@greymoth/sharecard",
+  "version": "0.1.0",
+  "description": "born-to-share 1200×630 cards as zero-dependency SVG strings — runs on server, edge, or browser. Turn any score into a shareable image.",
+  "type": "module",
+  "license": "MIT",
+  "author": "greymoth <m.hirakawa07@icloud.com>",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@greymoth/tokens": "^0.1.0",
+    "@greymoth/scorecard": "^0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/greymoth-jp/greymoth-devkit.git",
+    "directory": "packages/sharecard"
+  },
+  "keywords": ["og-image", "social-card", "share-card", "svg", "1200x630", "greymoth"]
+}

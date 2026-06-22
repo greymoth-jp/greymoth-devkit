@@ -1,0 +1,29 @@
+{
+  "name": "@greymoth/tokens",
+  "version": "0.1.0",
+  "description": "greymoth design tokens — riso/letterpress identity (paper-black, oxblood, vermillion, IBM Plex Mono, verdict-stamp). One source for CSS variables and typed JS.",
+  "type": "module",
+  "license": "MIT",
+  "author": "greymoth <m.hirakawa07@icloud.com>",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./tokens.css": "./dist/tokens.css"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/gen-css.mjs",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/greymoth-jp/greymoth-devkit.git",
+    "directory": "packages/tokens"
+  },
+  "keywords": ["design-tokens", "design-system", "risograph", "css-variables", "greymoth"]
+}

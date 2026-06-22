@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Prompt-injection risk">
+<defs><filter id="gm-inkbleed" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="1" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2" xChannelSelector="R" yChannelSelector="G"/></filter>
+<pattern id="gm-grain" width="220" height="220" patternUnits="userSpaceOnUse"><image href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E" width="220" height="220"/></pattern>
+</defs>
+<rect width="1200" height="630" fill="#f1ead8"/>
+<rect x="18" y="18" width="1164" height="594" fill="none" stroke="#211c14" stroke-width="2.5"/>
+<rect x="27" y="27" width="1146" height="576" fill="none" stroke="#9c3a2c" stroke-width="1.25"/>
+<text x="64" y="96" font-family="'IBM Plex Mono', 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" letter-spacing="6" fill="#9c3a2c">GREYMOTH · LLM-SHIELD</text>
+<line x1="64" y1="116" x2="184" y2="116" stroke="#9c3a2c" stroke-width="3"/>
+<text x="70" y="306" font-family="'IBM Plex Mono', 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" font-size="240" letter-spacing="-6" fill="#9c3a2c" opacity="0.26">97</text>
+<text x="64" y="300" font-family="'IBM Plex Mono', 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-weight="700" font-size="240" letter-spacing="-6" fill="#211c14">97</text>
+<g transform="translate(970 150) rotate(-7)" filter="url(#gm-inkbleed)" opacity="0.92">
+  <rect x="-75.35" y="-29.700000000000003" width="150.7" height="59.400000000000006" fill="none" stroke="#c8341e" stroke-width="2.2"/>
+  <rect x="-70.94999999999999" y="-25.300000000000004" width="141.89999999999998" height="50.60000000000001" fill="none" stroke="#c8341e" stroke-width="1.6500000000000001"/>
+  <text x="0" y="11.549999999999999" text-anchor="middle" font-family="'IBM Plex Mono', ui-monospace, monospace" font-weight="700" font-size="33" letter-spacing="2.2" fill="#c8341e">BLOCK</text>
+</g>
+<text x="64" y="430" font-family="'Fraunces', 'Didot', 'Bodoni MT', Georgia, 'Times New Roman', serif" font-weight="900" font-size="50" fill="#211c14">Prompt-injection risk</text>
+<text x="64" y="474" font-family="'IBM Plex Mono', 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="22" letter-spacing="0.5" fill="#4a4233">3 independent signals · noisy-OR</text>
+<line x1="64" y1="556" x2="1136" y2="556" stroke="#cfc4a6" stroke-width="1.5"/>
+<text x="64" y="582" font-family="'Fraunces', 'Didot', 'Bodoni MT', Georgia, 'Times New Roman', serif" font-weight="900" font-size="26" fill="#211c14">greymoth</text>
+<text x="1136" y="582" text-anchor="end" font-family="'IBM Plex Mono', 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" letter-spacing="2" fill="#4a4233">CARD-B2A90F</text>
+<rect width="1200" height="630" fill="url(#gm-grain)" opacity="0.18" style="mix-blend-mode:multiply"/>
+</svg>

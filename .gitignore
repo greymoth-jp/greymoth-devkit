@@ -6,6 +6,6 @@ Thumbs.db
 *.log
 .env
 .env.*
-/examples/out/*.png
-/examples/out/*.svg
-!/examples/out/.gitkeep
+# Verification screenshots are throwaway; the generated SVG cards are committed
+# proof (the landing page embeds them).
+/examples/out/_verify-*.png
