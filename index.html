@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>greymoth-devkit — deterministic rules in, a stamped verdict out</title>
+<meta name="description" content="The shared engine behind greymoth's tools. Deterministic rules in, a shareable verdict card out. Zero-LLM, zero-network." />
+<!-- Progressive enhancement only: page is fully legible offline via the fallback stacks. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #f1ead8;
+    --paper2: #e9e0c9;
+    --paper-edge: #d8ccb4;
+    --ink: #211c14;
+    --ink-soft: #4a4233;
+    --rule: #cfc4a6;
+    --oxblood: #9c3a2c;
+    --oxblood-deep: #7c2415;
+    --ochre: #b07d2c;
+    --amber: #c2790b;
+    --sage: #5e6b4f;
+    --crit: #c8341e;
+    --warn: #a8761a;
+    --ok: #2e5e3a;
+    --mono: "IBM Plex Mono", "DM Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --serif: "Fraunces", "Didot", "Bodoni MT", Georgia, "Times New Roman", serif;
+    --maxw: 1140px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+  /* risograph grain, multiply-blended over everything */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.30;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+  a { color: var(--oxblood); text-decoration: none; }
+  a:hover { color: var(--oxblood-deep); text-decoration: underline; text-underline-offset: 3px; }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--oxblood);
+    font-weight: 600;
+  }
+
+  /* off-register risograph heading */
+  .riso { position: relative; display: inline-block; }
+  .riso::after {
+    content: attr(data-t);
+    position: absolute;
+    left: 3px; top: 3px;
+    color: var(--oxblood);
+    opacity: 0.26;
+    z-index: -1;
+  }
+
+  /* rubber-stamp */
+  .stamp {
+    display: inline-block;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 3px double currentColor;
+    padding: 5px 12px;
+    transform: rotate(-7deg);
+    opacity: 0.9;
+  }
+  .stamp.ok { color: var(--ok); }
+  .stamp.crit { color: var(--crit); }
+  .stamp.warn { color: var(--warn); }
+
+  /* ───────── top bar ───────── */
+  header.bar {
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper);
+  }
+  .bar .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .wordmark { font-family: var(--serif); font-weight: 900; font-size: 22px; letter-spacing: -0.01em; }
+  .wordmark .slash { color: var(--oxblood); }
+  .bar nav { display: flex; gap: 22px; font-size: 13px; letter-spacing: 0.04em; }
+  .bar nav a { color: var(--ink-soft); }
+  .ver { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.1em; }
+
+  /* ───────── hero ───────── */
+  .hero { padding: 84px 0 64px; border-bottom: 1px solid var(--rule); position: relative; }
+  .hero .corner {
+    position: absolute; top: 28px; right: 28px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(48px, 8.5vw, 104px);
+    line-height: 0.96;
+    letter-spacing: -0.02em;
+    margin: 14px 0 8px;
+    max-width: 16ch;
+  }
+  .hero h1 .accent { color: var(--oxblood); }
+  .lede {
+    font-size: clamp(16px, 2.1vw, 21px);
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 18px 0 0;
+    line-height: 1.5;
+  }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  .cta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-top: 34px; }
+  .code-chip {
+    font-family: var(--mono);
+    font-size: 15px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 18px;
+    border-radius: 3px;
+    box-shadow: 4px 4px 0 var(--oxblood);
+  }
+  .code-chip .pmt { color: var(--ochre); }
+  .btn {
+    font-family: var(--mono);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    border: 2px solid var(--ink);
+    padding: 11px 18px;
+    border-radius: 3px;
+    color: var(--ink);
+    background: transparent;
+    transition: transform 0.08s ease, background 0.15s ease;
+  }
+  .btn:hover { background: var(--ink); color: var(--paper); text-decoration: none; transform: translate(-1px,-1px); }
+
+  /* staggered load reveal */
+  .reveal { opacity: 0; transform: translateY(14px); animation: rise 0.7s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+  .d1 { animation-delay: 0.05s; } .d2 { animation-delay: 0.15s; }
+  .d3 { animation-delay: 0.27s; } .d4 { animation-delay: 0.4s; } .d5 { animation-delay: 0.55s; }
+  @media (prefers-reduced-motion: reduce) { .reveal { animation: none; opacity: 1; transform: none; } }
+
+  /* ───────── pipeline ───────── */
+  section { padding: 72px 0; border-bottom: 1px solid var(--rule); }
+  .sec-head { margin-bottom: 40px; }
+  .sec-head h2 { font-family: var(--serif); font-weight: 900; font-size: clamp(28px,4vw,42px); margin: 8px 0 0; letter-spacing: -0.01em; }
+  .sec-head p { color: var(--ink-soft); max-width: 62ch; margin: 10px 0 0; }
+
+  .pipe {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: stretch;
+    gap: 0;
+  }
+  .node {
+    border: 2px solid var(--ink);
+    background: var(--paper2);
+    padding: 22px 20px;
+    position: relative;
+  }
+  .node .n-k { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--oxblood); }
+  .node .n-t { font-family: var(--serif); font-weight: 700; font-size: 20px; margin: 6px 0 4px; }
+  .node .n-d { font-size: 13px; color: var(--ink-soft); line-height: 1.45; }
+  .arrow { display: flex; align-items: center; justify-content: center; width: 56px; font-size: 26px; color: var(--oxblood); font-weight: 700; }
+  .pipe-foot {
+    margin-top: 18px;
+    border: 2px dashed var(--rule);
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .pipe-foot .tok { font-weight: 700; color: var(--ink); }
+
+  /* ───────── packages ───────── */
+  .pkgs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .pkg {
+    border: 2px solid var(--ink);
+    background: var(--paper);
+    padding: 24px;
+    box-shadow: 6px 6px 0 var(--paper-edge);
+    position: relative;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  .pkg:hover { transform: translate(-2px,-2px); box-shadow: 8px 8px 0 var(--oxblood); }
+  .pkg h3 { font-family: var(--mono); font-size: 17px; font-weight: 700; margin: 0; color: var(--ink); }
+  .pkg h3 .scope { color: var(--oxblood); }
+  .pkg .tag { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin-top: 4px; }
+  .pkg p { font-size: 14px; color: var(--ink-soft); margin: 14px 0; line-height: 1.55; }
+  pre {
+    margin: 0;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 16px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    overflow-x: auto;
+  }
+  pre .k { color: var(--ochre); }
+  pre .s { color: #d9b38c; }
+  pre .c { color: #8c7f63; }
+
+  /* ───────── proof ───────── */
+  .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .proof figure { margin: 0; }
+  .proof img {
+    width: 100%; height: auto; display: block;
+    border: 2px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--paper-edge);
+  }
+  .proof figcaption { font-size: 12px; color: var(--ink-soft); margin-top: 10px; letter-spacing: 0.03em; }
+  .proof figcaption b { color: var(--ink); }
+
+  /* ───────── tenets ───────── */
+  .tenets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 2px solid var(--ink); }
+  .tenet { padding: 26px 22px; border-right: 1px solid var(--rule); }
+  .tenet:last-child { border-right: none; }
+  .tenet .big { font-family: var(--serif); font-weight: 900; font-size: 30px; color: var(--oxblood); }
+  .tenet .lbl { font-size: 13px; color: var(--ink-soft); margin-top: 6px; line-height: 1.4; }
+
+  /* ───────── footer ───────── */
+  footer { padding: 48px 0 64px; }
+  footer .wrap { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 16px; }
+  footer .brand { font-family: var(--serif); font-weight: 900; font-size: 26px; }
+  footer .meta { font-size: 12px; color: var(--ink-soft); letter-spacing: 0.1em; }
+
+  @media (max-width: 860px) {
+    .pipe { grid-template-columns: 1fr; }
+    .arrow { width: auto; height: 44px; transform: rotate(90deg); }
+    .pkgs { grid-template-columns: 1fr; }
+    .proof-grid { grid-template-columns: 1fr; }
+    .tenets { grid-template-columns: repeat(2, 1fr); }
+    .tenet:nth-child(2) { border-right: none; }
+    .tenet:nth-child(1), .tenet:nth-child(2) { border-bottom: 1px solid var(--rule); }
+    .bar nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="wordmark">greymoth<span class="slash">/</span>devkit</div>
+    <nav>
+      <a href="#pipeline">pipeline</a>
+      <a href="#packages">packages</a>
+      <a href="#proof">proof</a>
+      <a href="https://github.com/greymoth-jp/greymoth-devkit">github ↗</a>
+    </nav>
+    <span class="ver">v0.1.0 · MIT</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="corner reveal d1"><span class="stamp crit">deterministic</span></div>
+    <p class="eyebrow reveal d1">the engine behind greymoth's tools</p>
+    <h1 class="reveal d2"><span class="riso" data-t="Proof,">Proof,</span> <span class="accent">stamped.</span></h1>
+    <p class="lede reveal d3">
+      Deterministic rules in, a shareable verdict card out. The scoring engine and the
+      born-to-share card that had been hand-copied across <b>28 greymoth apps</b> — extracted
+      into one small toolkit. <b>No LLM. No network. No randomness.</b> Same input, same card, every time.
+    </p>
+    <div class="cta reveal d4">
+      <span class="code-chip"><span class="pmt">$</span> npm i @greymoth/scorecard</span>
+      <a class="btn" href="#proof">see the proof ↓</a>
+      <a class="btn" href="https://github.com/greymoth-jp/greymoth-devkit">read the source</a>
+    </div>
+  </div>
+</div>
+
+<section id="pipeline">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">how it composes</p>
+      <h2>Four packages, one pipeline.</h2>
+      <p>Each package stands alone, but they click together: a subject goes in, a transparent score comes out, a verdict is resolved, and a card you can post is rendered — all from plain data.</p>
+    </div>
+    <div class="pipe">
+      <div class="node">
+        <div class="n-k">01 · input</div>
+        <div class="n-t">rules-core</div>
+        <div class="n-d">Define rules as data. Evaluate any subject into findings + a 0–100 score. Linear or noisy-OR.</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="n-k">02 · verdict</div>
+        <div class="n-t">scorecard</div>
+        <div class="n-d">Map the score to a verdict (pass / risk / fail) and draw the distressed stamp.</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <div class="n-k">03 · output</div>
+        <div class="n-t">sharecard</div>
+        <div class="n-d">Render a 1200×630 born-to-share SVG — server, edge, or browser. Zero dependencies.</div>
+      </div>
+    </div>
+    <div class="pipe-foot">
+      <span class="stamp warn" style="transform:rotate(-4deg)">base</span>
+      <span><span class="tok">tokens</span> — the warm-paper / oxblood / IBM&nbsp;Plex&nbsp;Mono identity underneath all three, as CSS variables and typed JS. One source, no drift.</span>
+    </div>
+  </div>
+</section>
+
+<section id="packages">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">the toolkit</p>
+      <h2>What's in the box.</h2>
+    </div>
+    <div class="pkgs">
+      <div class="pkg">
+        <h3><span class="scope">@greymoth/</span>rules-core</h3>
+        <div class="tag">deterministic rule engine · no llm</div>
+        <p>Rules are plain objects. <code>evaluate()</code> runs a subject through them and returns findings plus a score where every point lost is attributable to a named rule. <code>noisyOr()</code> covers threat-style risk aggregation.</p>
+        <pre><span class="c">// every point lost has a name</span>
+<span class="k">const</span> r = evaluate(repoRules, repo)
+r.score <span class="c">// 91</span>  failures(r) <span class="c">// [ci]</span></pre>
+      </div>
+      <div class="pkg">
+        <h3><span class="scope">@greymoth/</span>scorecard</h3>
+        <div class="tag">0–100 score + verdict-stamp</div>
+        <p>One score-to-verdict map and one stamp, instead of the copy reimplemented in every checker. Framework-agnostic SVG/HTML strings — drop them anywhere.</p>
+        <pre><span class="k">const</span> v = verdict(91)
+<span class="c">// { level:'ok', label:'PASS', color:'#2e5e3a' }</span>
+verdictStampSvg(v, x, y)</pre>
+      </div>
+      <div class="pkg">
+        <h3><span class="scope">@greymoth/</span>sharecard</h3>
+        <div class="tag">born-to-share 1200×630 svg</div>
+        <p>The growth primitive: turn any score into an image worth posting. A zero-dependency SVG string with a deterministic serial — runs on server, edge, or in the browser.</p>
+        <pre>scoreCardSvg({ score: <span class="s">91</span>,
+  title: <span class="s">'Repository health'</span> })
+<span class="c">// → &lt;svg …&gt; (CARD-1A2B3C)</span></pre>
+      </div>
+      <div class="pkg">
+        <h3><span class="scope">@greymoth/</span>tokens</h3>
+        <div class="tag">design tokens · css + typed js</div>
+        <p>The greymoth identity in one authoritative place: paper, ink, oxblood, the verdict-stamp, the riso grain. Import the typed objects, or pull <code>tokens.css</code> for <code>--gm-*</code> variables.</p>
+        <pre><span class="k">import</span> { color } <span class="k">from</span> <span class="s">'@greymoth/tokens'</span>
+color.oxblood <span class="c">// '#9c3a2c'</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">not a mockup</p>
+      <h2>These three cards were generated by the code.</h2>
+      <p>Run <code>npm run demo</code> and these exact SVGs land in <code>examples/out/</code> — repo audit, prompt-injection risk, and a clean pass. Deterministic, so they never change unless the input does.</p>
+    </div>
+    <div class="proof proof-grid">
+      <figure class="reveal d1">
+        <img src="examples/out/repo-health.svg" alt="Repository health share card, score 91, PASS" />
+        <figcaption><b>rules-core → sharecard.</b> Repo audit, linear scoring, verdict PASS.</figcaption>
+      </figure>
+      <figure class="reveal d2">
+        <img src="examples/out/injection-risk.svg" alt="Prompt-injection risk share card, risk 97, BLOCK" />
+        <figcaption><b>noisyOr → sharecard.</b> Three injection signals, risk 97, BLOCK.</figcaption>
+      </figure>
+      <figure class="reveal d3">
+        <img src="examples/out/pass.svg" alt="Deliverability share card, score 94, inbox-ready" />
+        <figcaption><b>scoreCardSvg.</b> Deliverability 94, all signals green.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">the constraints are the point</p>
+      <h2>Boring on purpose.</h2>
+    </div>
+    <div class="tenets">
+      <div class="tenet"><div class="big">0</div><div class="lbl">LLM calls. Pure rules, regex, and arithmetic.</div></div>
+      <div class="tenet"><div class="big">0</div><div class="lbl">network requests. Nothing leaves the device.</div></div>
+      <div class="tenet"><div class="big">0</div><div class="lbl">runtime dependencies across all four packages.</div></div>
+      <div class="tenet"><div class="big">=</div><div class="lbl">deterministic. Same input → byte-identical output.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand">greymoth<span style="color:var(--oxblood)">/</span>devkit</div>
+    <div class="meta">MIT · built by greymoth · <a href="https://github.com/greymoth-jp/greymoth-devkit">github.com/greymoth-jp/greymoth-devkit</a></div>
+    <div class="meta">CARD-GREY01</div>
+  </div>
+</footer>
+
+</body>
+</html>

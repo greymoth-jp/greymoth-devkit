@@ -18,8 +18,7 @@
     "packages/sharecard"
   ],
   "scripts": {
-    "build": "npm -w @greymoth/tokens run build && npm -w @greymoth/rules-core run build && npm -w @greymoth/scorecard run build && npm -w @greymoth/sharecard run build",
-    "typecheck": "tsc --noEmit -p tsconfig.base.json",
+    "build": "tsc -p packages/tokens/tsconfig.json && node packages/tokens/scripts/gen-css.mjs && tsc -p packages/rules-core/tsconfig.json && tsc -p packages/scorecard/tsconfig.json && tsc -p packages/sharecard/tsconfig.json",
     "pretest": "npm run build",
     "test": "node --test",
     "demo": "node examples/pipeline-demo.ts",
